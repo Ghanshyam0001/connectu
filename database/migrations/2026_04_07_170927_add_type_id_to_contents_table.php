@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('contents', function (Blueprint $table) {
-            $table->dropForeign(['type_id']); // ignore error if doesn't exist
-            $table->unsignedBigInteger('type_id')->nullable()->after('category_id')->change();
-            $table->foreign('type_id')
-                ->references('id')
-                ->on('types')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->unsignedBigInteger('type_id')->after('category_id');
+
+        $table->foreign('type_id')
+              ->references('id')
+              ->on('types')
+              ->onDelete('cascade');
         });
     }
 
@@ -28,7 +27,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('contents', function (Blueprint $table) {
-            //
+            $table->dropForeign(['type_id']);
+        $table->dropColumn('type_id');
         });
     }
 };
